@@ -346,55 +346,55 @@ export default function InsiderThreatMonitorPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-3">
       {/* Title section with border */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-5">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200 pb-2.5">
         <div>
-          <h1 className="text-2xl font-black text-ink-900 tracking-tight">Security & Privileged Monitor</h1>
-          <p className="text-xs text-ink-400 mt-1 font-medium leading-relaxed">
+          <h1 className="text-xl font-black text-ink-900 tracking-tight">Security & Privileged Monitor</h1>
+          <p className="text-[11px] text-ink-400 font-medium leading-tight mt-0.5">
             Correlating anomalies, analyzing behavioral shifts, and enforcing automated mitigations in real-time.
           </p>
         </div>
-        <div className="flex items-center gap-2 bg-emerald-50 border border-emerald-100 text-emerald-700 px-3 py-1.5 rounded-lg text-xs font-semibold self-start sm:self-center shadow-sm">
-          <span className="h-2.5 w-2.5 rounded-full bg-emerald-500 animate-pulse inline-block"></span>
+        <div className="flex items-center gap-1.5 bg-emerald-50 border border-emerald-100 text-emerald-700 px-2.5 py-1 rounded-md text-[11px] font-bold self-start sm:self-center shadow-xs">
+          <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse inline-block"></span>
           <span>Security Engine Live</span>
         </div>
       </div>
 
       {/* Grid of stats */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5">
         <StatTile label="Monitored Identities" value={baselines ? baselines.roles.length + totalUsers : totalUsers} tone="brand" icon="👥" />
         <StatTile label="Actions Logged" value={actions.length} tone="default" icon="📋" />
         <StatTile label="Threat Alerts Active" value={alertCount} tone={alertCount > 0 ? 'medium' : 'default'} icon="⚠️" />
         <StatTile label="Suspended Sessions" value={suspendedCount} tone={suspendedCount > 0 ? 'high' : 'default'} icon="🚫" />
       </div>
 
-      <div className="grid lg:grid-cols-3 gap-6">
+      <div className="grid lg:grid-cols-3 gap-3.5 items-start">
         {/* Actions Feed */}
-        <div className="card p-6 lg:col-span-2 space-y-4 shadow-sm">
-          <div className="flex items-center justify-between border-b border-ink-100 pb-3">
-            <h2 className="text-sm font-extrabold text-ink-800 tracking-wide uppercase">📡 Live Privileged Actions Feed</h2>
-            <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-slate-500 bg-slate-50 border border-slate-200 px-2 py-0.5 rounded-md">
+        <div className="card p-4 lg:col-span-2 shadow-sm space-y-2.5">
+          <div className="flex items-center justify-between border-b border-ink-100 pb-2">
+            <h2 className="text-xs font-black text-ink-800 tracking-wide uppercase">📡 Live Privileged Actions Feed</h2>
+            <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-slate-500 bg-slate-50 border border-slate-200 px-2 py-0.5 rounded">
               <span className="h-1.5 w-1.5 rounded-full bg-emerald-500"></span> Poll active
             </span>
           </div>
 
           {actions.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-20 text-center space-y-2">
-              <span className="text-3xl">📭</span>
-              <p className="text-sm font-semibold text-ink-500">No privileged actions logged yet.</p>
-              <p className="text-xs text-ink-400">Perform a transfer in Recipient Shield or trigger a simulation to populate.</p>
+            <div className="flex flex-col items-center justify-center py-16 text-center space-y-1.5">
+              <span className="text-2xl">📭</span>
+              <p className="text-xs font-bold text-ink-500">No privileged actions logged yet.</p>
+              <p className="text-[10px] text-ink-400">Perform a transfer in Recipient Shield or trigger a simulation to populate.</p>
             </div>
           ) : (
-            <div className="overflow-y-auto overflow-x-auto thin-scroll max-h-[500px] pr-1.5 relative">
-              <table className="w-full text-left border-collapse text-xs">
+            <div className="overflow-y-auto overflow-x-auto thin-scroll max-h-[380px] pr-1 relative">
+              <table className="w-full text-left border-collapse text-[11px]">
                 <thead className="sticky top-0 bg-white z-10 shadow-[0_1px_0_0_rgba(0,0,0,0.05)]">
-                  <tr className="text-[10px] uppercase tracking-wider text-ink-400">
-                    <th className="pb-3 pt-2 font-bold">User Identity</th>
-                    <th className="pb-3 pt-2 font-bold">Action Type</th>
-                    <th className="pb-3 pt-2 font-bold">Resource Target</th>
-                    <th className="pb-3 pt-2 font-bold text-center">Risk Index</th>
-                    <th className="pb-3 pt-2 font-bold text-right">Enforcement</th>
+                  <tr className="text-[9.5px] uppercase tracking-wider text-ink-400">
+                    <th className="pb-2 pt-1 font-bold">User Identity</th>
+                    <th className="pb-2 pt-1 font-bold">Action Type</th>
+                    <th className="pb-2 pt-1 font-bold">Resource Target</th>
+                    <th className="pb-2 pt-1 font-bold text-center">Risk Index</th>
+                    <th className="pb-2 pt-1 font-bold text-right">Enforcement</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100">
@@ -420,24 +420,24 @@ export default function InsiderThreatMonitorPage() {
                           isSelected ? 'bg-shield-50/50 font-medium' : 'hover:bg-slate-50/80'
                         }`}
                       >
-                        <td className="py-3 pr-2 flex items-center gap-2.5">
-                          <div className="h-8 w-8 rounded-full bg-slate-100 border border-slate-200 font-bold text-[10px] text-slate-700 flex items-center justify-center shrink-0 shadow-sm">
+                        <td className="py-2 pr-2 flex items-center gap-2">
+                          <div className="h-7 w-7 rounded-full bg-slate-100 border border-slate-200 font-bold text-[9px] text-slate-700 flex items-center justify-center shrink-0 shadow-xs">
                             {initials}
                           </div>
                           <div>
-                            <p className="text-ink-900 font-bold leading-tight">{act.full_name}</p>
-                            <p className="text-[10px] text-ink-400 font-semibold leading-tight mt-0.5">{act.role}</p>
+                            <p className="text-ink-900 font-bold leading-tight text-[11px]">{act.full_name}</p>
+                            <p className="text-[9.5px] text-ink-400 font-semibold leading-tight">{act.role}</p>
                           </div>
                         </td>
-                        <td className="py-3 pr-2">
-                          <span className={`font-mono text-[10px] font-bold px-2 py-1 rounded border shadow-sm ${actionBadgeColor}`}>
+                        <td className="py-2 pr-2">
+                          <span className={`font-mono text-[9px] font-bold px-1.5 py-0.5 rounded border shadow-xs ${actionBadgeColor}`}>
                             {act.action_type}
                           </span>
                         </td>
-                        <td className="py-3 pr-2 text-ink-600 font-medium max-w-[130px] truncate font-mono text-[11px]">{act.resource_target || '--'}</td>
-                        <td className="py-3 pr-2 text-center">
+                        <td className="py-2 pr-2 text-ink-600 font-medium max-w-[120px] truncate font-mono text-[10px]">{act.resource_target || '--'}</td>
+                        <td className="py-2 pr-2 text-center">
                           <span
-                            className={`inline-block font-mono font-bold text-[11px] px-2 py-0.5 rounded-full ${
+                            className={`inline-block font-mono font-bold text-[10px] px-1.5 py-0.5 rounded-full ${
                               act.risk_level === 'HIGH'
                                 ? 'bg-red-50 text-red-700 border border-red-100'
                                 : act.risk_level === 'MEDIUM'
@@ -448,9 +448,9 @@ export default function InsiderThreatMonitorPage() {
                             {act.risk_score}
                           </span>
                         </td>
-                        <td className="py-3 text-right">
+                        <td className="py-2 text-right">
                           <span
-                            className={`pill text-[9px] font-extrabold tracking-wider uppercase border shadow-sm ${
+                            className={`pill text-[8.5px] font-extrabold tracking-wider uppercase border shadow-xs ${
                               act.status === 'BLOCKED'
                                 ? 'bg-red-50 text-red-700 border-red-200'
                                 : act.status === 'OVERRIDDEN'
@@ -471,53 +471,53 @@ export default function InsiderThreatMonitorPage() {
         </div>
 
         {/* Right Sidebar: Simulators & Details */}
-        <div className="space-y-6 lg:col-span-1">
+        <div className="space-y-3 lg:col-span-1">
           {/* Simulator Panel */}
-          <div className="card p-6 shadow-sm space-y-4">
-            <h2 className="text-sm font-extrabold text-ink-800 border-b border-ink-100 pb-2 tracking-wide uppercase">⚡ Scenario Simulator</h2>
-            <p className="text-xs text-ink-400 leading-relaxed font-semibold">
-              Trigger high-privileged operational events to test threat analysis algorithms:
+          <div className="card p-3.5 shadow-sm space-y-2">
+            <h2 className="text-xs font-black text-ink-800 border-b border-ink-100 pb-1.5 tracking-wide uppercase">⚡ Scenario Simulator</h2>
+            <p className="text-[10px] text-ink-400 font-semibold leading-tight">
+              Trigger high-privileged operational events to test threat algorithms:
             </p>
-            <div className="space-y-3">
+            <div className="space-y-1.5">
               <button
-                className="w-full text-left btn-secondary text-xs p-3 border-l-4 border-l-red-500 hover:border-l-red-600 hover:bg-slate-50 flex flex-col items-start gap-1 shadow-sm hover:translate-x-1 transition-all duration-150"
+                className="w-full text-left btn-secondary text-[11px] p-2 border-l-4 border-l-red-500 hover:border-l-red-600 hover:bg-slate-50 flex flex-col items-start gap-0.5 shadow-xs hover:translate-x-0.5 transition-all duration-150"
                 disabled={busyScenario !== null}
                 onClick={() => handleSimulate('admin_out_of_hours_sql_dump')}
               >
                 <div className="flex w-full items-center justify-between">
-                  <span className="font-extrabold text-ink-800">1. Out-of-Hours SQL Dump</span>
-                  <span className="text-[9px] text-red-700 font-black bg-red-50 border border-red-100 px-1.5 py-0.5 rounded">High Risk</span>
+                  <span className="font-extrabold text-ink-800 text-[11px]">1. Out-of-Hours SQL Dump</span>
+                  <span className="text-[8.5px] text-red-700 font-black bg-red-50 border border-red-100 px-1 py-0.2 rounded">High Risk</span>
                 </div>
-                <span className="text-[10px] text-ink-400 font-medium mt-0.5 leading-relaxed">
-                  SysAdmin triggers database backup export at 2:14 AM outside of change ticket window.
+                <span className="text-[9.5px] text-ink-400 font-medium leading-tight">
+                  SysAdmin triggers database backup export at 2:14 AM outside ticket window.
                 </span>
               </button>
 
               <button
-                className="w-full text-left btn-secondary text-xs p-3 border-l-4 border-l-amber-500 hover:border-l-amber-600 hover:bg-slate-50 flex flex-col items-start gap-1 shadow-sm hover:translate-x-1 transition-all duration-150"
+                className="w-full text-left btn-secondary text-[11px] p-2 border-l-4 border-l-amber-500 hover:border-l-amber-600 hover:bg-slate-50 flex flex-col items-start gap-0.5 shadow-xs hover:translate-x-0.5 transition-all duration-150"
                 disabled={busyScenario !== null}
                 onClick={() => handleSimulate('support_role_elevation')}
               >
                 <div className="flex w-full items-center justify-between">
-                  <span className="font-extrabold text-ink-800">2. Support Staff Elevation</span>
-                  <span className="text-[9px] text-amber-700 font-black bg-amber-50 border border-amber-100 px-1.5 py-0.5 rounded">Med Risk</span>
+                  <span className="font-extrabold text-ink-800 text-[11px]">2. Support Staff Elevation</span>
+                  <span className="text-[8.5px] text-amber-700 font-black bg-amber-50 border border-amber-100 px-1 py-0.2 rounded">Med Risk</span>
                 </div>
-                <span className="text-[10px] text-ink-400 font-medium mt-0.5 leading-relaxed">
-                  Sarah Connor elevates to Admin override role from a new laptop without active incident ticket.
+                <span className="text-[9.5px] text-ink-400 font-medium leading-tight">
+                  Sarah Connor elevates to Admin override role without active incident ticket.
                 </span>
               </button>
 
               <button
-                className="w-full text-left btn-secondary text-xs p-3 border-l-4 border-l-emerald-500 hover:border-l-emerald-600 hover:bg-slate-50 flex flex-col items-start gap-1 shadow-sm hover:translate-x-1 transition-all duration-150"
+                className="w-full text-left btn-secondary text-[11px] p-2 border-l-4 border-l-emerald-500 hover:border-l-emerald-600 hover:bg-slate-50 flex flex-col items-start gap-0.5 shadow-xs hover:translate-x-0.5 transition-all duration-150"
                 disabled={busyScenario !== null}
                 onClick={() => handleSimulate('cfo_transfer')}
               >
                 <div className="flex w-full items-center justify-between">
-                  <span className="font-extrabold text-ink-800">3. Normal CFO Transfer</span>
-                  <span className="text-[9px] text-emerald-700 font-black bg-emerald-50 border border-emerald-100 px-1.5 py-0.5 rounded">Low Risk</span>
+                  <span className="font-extrabold text-ink-800 text-[11px]">3. Normal CFO Transfer</span>
+                  <span className="text-[8.5px] text-emerald-700 font-black bg-emerald-50 border border-emerald-100 px-1 py-0.2 rounded">Low Risk</span>
                 </div>
-                <span className="text-[10px] text-ink-400 font-medium mt-0.5 leading-relaxed">
-                  Bruce Wayne executes standard financial transfer during active maintenance schedule.
+                <span className="text-[9.5px] text-ink-400 font-medium leading-tight">
+                  Bruce Wayne executes standard financial transfer during active maintenance.
                 </span>
               </button>
             </div>
@@ -525,21 +525,21 @@ export default function InsiderThreatMonitorPage() {
 
           {/* Role Baselines Chart */}
           {baselines && (
-            <div className="card p-6 shadow-sm space-y-4">
-              <h2 className="text-sm font-extrabold text-ink-800 border-b border-ink-100 pb-2 tracking-wide uppercase">📈 Role Daily Activity</h2>
-              <p className="text-xs text-ink-400 font-semibold">Normal baseline actions derived from peer group telemetry.</p>
-              <ResponsiveContainer width="100%" height={160}>
-                <BarChart data={chartData} margin={{ left: -30, right: 5, bottom: 5, top: 10 }}>
+            <div className="card p-3.5 shadow-sm space-y-2">
+              <h2 className="text-xs font-black text-ink-800 border-b border-ink-100 pb-1 tracking-wide uppercase">📈 Role Daily Activity</h2>
+              <p className="text-[10px] text-ink-400 font-semibold">Normal baseline actions vs live actions recorded.</p>
+              <ResponsiveContainer width="100%" height={115}>
+                <BarChart data={chartData} margin={{ left: -32, right: 5, bottom: 0, top: 5 }}>
                   <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
                   <XAxis dataKey="name" stroke="#94a3b8" fontSize={8} tickLine={false} />
                   <YAxis stroke="#94a3b8" fontSize={8} tickLine={false} />
-                  <Tooltip contentStyle={{ fontSize: '10px', borderRadius: '8px' }} />
-                  <Bar dataKey="Baseline" fill="#cbd5e1" radius={[3, 3, 0, 0]} name="Baseline Avg" />
-                  <Bar dataKey="Actual" fill="#2563eb" radius={[3, 3, 0, 0]} name="Actual (Live)" />
+                  <Tooltip contentStyle={{ fontSize: '10px', borderRadius: '6px', padding: '4px 8px' }} />
+                  <Bar dataKey="Baseline" fill="#cbd5e1" radius={[2, 2, 0, 0]} name="Baseline Avg" />
+                  <Bar dataKey="Actual" fill="#2563eb" radius={[2, 2, 0, 0]} name="Actual (Live)" />
                 </BarChart>
               </ResponsiveContainer>
-              <div className="text-[9px] text-slate-500 font-semibold flex items-center justify-between bg-slate-50 border border-slate-100 p-2.5 rounded-lg">
-                <span>Shift Policy: {baselines.normal_hours}</span>
+              <div className="text-[8.5px] text-slate-500 font-semibold flex items-center justify-between bg-slate-50 border border-slate-100 p-1.5 rounded">
+                <span>Shift: {baselines.normal_hours}</span>
                 <span>Active tickets: {baselines.active_maintenance_windows.length}</span>
               </div>
             </div>

@@ -26,13 +26,13 @@ export default function StatTile({ label, value, tone = 'default', icon }) {
   }[tone]
 
   return (
-    <div className={`card p-5 ${accentClass} hover:shadow-md hover:translate-y-[-2px] transition-all duration-200 relative overflow-hidden group`}>
-      <div className="flex justify-between items-start">
+    <div className={`card p-3.5 ${accentClass} hover:shadow-md hover:translate-y-[-1px] transition-all duration-200 relative overflow-hidden group`}>
+      <div className="flex justify-between items-center">
         <div>
           <p className="text-[10px] font-bold uppercase tracking-wider text-ink-400 group-hover:text-ink-500 transition-colors">{label}</p>
-          <p className={`text-3xl font-extrabold mt-2.5 tracking-tight ${textClass}`}>{value}</p>
+          <p className={`text-2xl font-black mt-0.5 tracking-tight ${textClass}`}>{value}</p>
         </div>
-        <div className={`h-9 w-9 rounded-lg ${bgLight} text-lg flex items-center justify-center shrink-0 shadow-sm`}>
+        <div className={`h-8 w-8 rounded-lg ${bgLight} text-base flex items-center justify-center shrink-0 shadow-sm`}>
           {icon || "📊"}
         </div>
       </div>
