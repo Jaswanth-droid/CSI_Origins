@@ -122,7 +122,6 @@ def check_risk(payload: schemas.CheckRiskRequest, db: Session = Depends(get_db),
     # Generate and send OTP if the decision is VERIFY
     if result["decision"] == "VERIFY" and sender.owner and sender.owner.email:
         import random
-        from datetime import datetime, timedelta
         otp_code = f"{random.randint(100000, 999999)}"
         expiry = datetime.utcnow() + timedelta(minutes=5)
         transfer_otps[sender.user_id] = (otp_code, expiry)

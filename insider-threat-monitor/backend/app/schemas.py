@@ -1,5 +1,6 @@
 from pydantic import BaseModel, ConfigDict
-from typing import List, Optional
+from typing import List, Optional, Union
+from datetime import datetime
 
 class PrivilegedActionOut(BaseModel):
     id: str
@@ -8,7 +9,7 @@ class PrivilegedActionOut(BaseModel):
     full_name: str
     role: str
     action_type: str
-    timestamp: str
+    timestamp: Union[str, datetime]
     resource_target: Optional[str] = None
     business_context: str
     shift_status: str
