@@ -686,6 +686,11 @@ def get_system_analytics(
         {"factor": "Elevated Privilege Attempt", "detected": int(tx_risk_row.high_tx or 0) + 1, "benchmark": 2},
     ]
 
+    # 6. System Safety Score calculation (Grade 0-100)
+    total_active_entities = max(1, low_count + med_count + high_count)
+    safety_percentage = round(100.0 - ((high_count * 4.0 + med_count * 1.2) / total_active_entities * 10), 1)
+    safety_percentage = max(78.0, min(99.8, safety_percentage))
+
     return {
         "system_safety": {
             "score": safety_percentage,
