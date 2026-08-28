@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import api from '../api/client'
 import StatTile from '../components/StatTile'
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, CartesianGrid } from 'recharts'
+import { 
+  BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, CartesianGrid, 
+  AreaChart, Area, PieChart, Pie, Legend, LineChart, Line 
+} from 'recharts'
 
 export default function InsiderThreatMonitorPage() {
   const [activeTab, setActiveTab] = useState('feed') // 'feed' | 'analytics'
@@ -668,6 +671,138 @@ export default function InsiderThreatMonitorPage() {
               <p className="text-[10px] text-ink-500 leading-tight">
                 Quarantined / Held sessions. Out-of-hours mass actions or severe anomalies.
               </p>
+            </div>
+          </div>
+
+          {/* Visual Graphs Row 1: Velocity Timeline & Risk Distribution Donut */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-3.5">
+            {/* Live Transaction Velocity & Risk Wave Area Chart */}
+            <div className="card p-3.5 lg:col-span-2 shadow-sm space-y-2">
+              <div className="flex items-center justify-between border-b border-ink-100 pb-1.5">
+                <div>
+                  <h2 className="text-xs font-black text-ink-800 uppercase tracking-wide">📈 Transaction Velocity & Real-Time Risk Stream</h2>
+                  <p className="text-[9.5px] text-ink-400 font-medium">Tracking live transfer volume spikes and correlated anomaly risk scores.</p>
+                </div>
+                <span className="text-[9px] font-mono font-bold bg-blue-50 text-blue-700 border border-blue-100 px-1.5 py-0.2 rounded">
+                  Live Feed Wave
+                </span>
+              </div>
+              <ResponsiveContainer width="100%" height={155}>
+                <AreaChart data={analyticsData.timeline_stream || []} margin={{ left: -25, right: 10, bottom: 0, top: 10 }}>
+                  <defs>
+                    <linearGradient id="colorAmount" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.4}/>
+                      <stop offset="95%" stopColor="#3b82f6" stopOpacity={0.0}/>
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                  <XAxis dataKey="step" stroke="#94a3b8" fontSize={8.5} tickLine={false} />
+                  <YAxis yAxisId="left" stroke="#94a3b8" fontSize={8.5} tickLine={false} />
+                  <YAxis yAxisId="right" orientation="right" domain={[0, 100]} stroke="#ef4444" fontSize={8.5} tickLine={false} />
+                  <Tooltip 
+                    contentStyle={{ fontSize: '10px', borderRadius: '6px', padding: '4px 8px' }} 
+                    formatter={(value, name) => [name === 'amount' ? `₹${value.toLocaleString()}` : `${value} pts`, name === 'amount' ? 'Amount (INR)' : 'Risk Index']}
+                  />
+                  <Area yAxisId="left" type="monotone" dataKey="amount" stroke="#2563eb" strokeWidth={2} fillOpacity={1} fill="url(#colorAmount)" name="amount" />
+                  <Line yAxisId="right" type="monotone" dataKey="risk_score" stroke="#ef4444" strokeWidth={2} dot={{ r: 2.5 }} name="risk_score" />
+                </AreaChart>
+              </ResponsiveContainer>
+              <div className="flex items-center justify-between text-[8.5px] font-semibold text-slate-500 bg-slate-50 border border-slate-100 p-1.5 rounded">
+                <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-blue-500"></span> Blue: Transfer Volume (₹)</span>
+                <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-red-500"></span> Red: Risk Index (0-100)</span>
+              </div>
+            </div>
+
+            {/* Platform Risk Donut Chart */}
+            <div className="card p-3.5 lg:col-span-1 shadow-sm space-y-2 flex flex-col justify-between">
+              <div className="border-b border-ink-100 pb-1.5">
+                <h2 className="text-xs font-black text-ink-800 uppercase tracking-wide">🍩 Threat Segregation</h2>
+                <p className="text-[9.5px] text-ink-400 font-medium">Risk category volume distribution.</p>
+              </div>
+              <div className="h-[125px] w-full flex items-center justify-center relative">
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie
+                      data={analyticsData.transaction_risk_pie || []}
+                      cx="50%"
+                      cy="50%"
+                      innerRadius={32}
+                      outerRadius={52}
+                      paddingAngle={3}
+                      dataKey="value"
+                    >
+                      {(analyticsData.transaction_risk_pie || []).map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.color} />
+                      ))}
+                    </Pie>
+                    <Tooltip contentStyle={{ fontSize: '10px', borderRadius: '6px', padding: '3px 6px' }} />
+                  </PieChart>
+                </ResponsiveContainer>
+                <div className="absolute text-center pointer-events-none">
+                  <span className="text-[10px] font-bold text-ink-400 leading-none">Total</span>
+                  <p className="text-xs font-black text-ink-900 leading-tight">{analyticsData.system_safety.total_transactions}</p>
+                </div>
+              </div>
+              <div className="grid grid-cols-3 gap-1 text-center">
+                {(analyticsData.transaction_risk_pie || []).map((p, i) => (
+                  <div key={i} className="p-1 rounded bg-slate-50 border border-slate-100">
+                    <span className="block text-[8px] font-bold text-ink-400 uppercase truncate">{p.name.split(' ')[0]}</span>
+                    <span className="text-[10.5px] font-black" style={{ color: p.color }}>{p.value}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Visual Graphs Row 2: Behavioral Anomaly Vectors & SLA Telemetry */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-3.5">
+            {/* Behavioral Shifts Bar Chart */}
+            <div className="card p-3.5 lg:col-span-2 shadow-sm space-y-2">
+              <div className="flex items-center justify-between border-b border-ink-100 pb-1.5">
+                <div>
+                  <h2 className="text-xs font-black text-ink-800 uppercase tracking-wide">📊 Behavioral Shifts & Anomaly Vectors</h2>
+                  <p className="text-[9.5px] text-ink-400 font-medium">Detected operational deviations vs expected safe baselines.</p>
+                </div>
+                <span className="text-[9px] font-mono font-bold bg-amber-50 text-amber-700 border border-amber-100 px-1.5 py-0.2 rounded">
+                  Anomaly Matrix
+                </span>
+              </div>
+              <ResponsiveContainer width="100%" height={125}>
+                <BarChart data={analyticsData.anomaly_factors || []} margin={{ left: -25, right: 10, bottom: 0, top: 5 }}>
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                  <XAxis dataKey="factor" stroke="#94a3b8" fontSize={7.5} tickLine={false} />
+                  <YAxis stroke="#94a3b8" fontSize={8} tickLine={false} />
+                  <Tooltip contentStyle={{ fontSize: '10px', borderRadius: '6px', padding: '4px 8px' }} />
+                  <Bar dataKey="benchmark" fill="#e2e8f0" radius={[2, 2, 0, 0]} name="Benchmark Max" />
+                  <Bar dataKey="detected" fill="#f59e0b" radius={[2, 2, 0, 0]} name="Detected Events" />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+
+            {/* SLA & Security Defense Telemetry Matrix */}
+            <div className="card p-3.5 lg:col-span-1 shadow-sm space-y-2 flex flex-col justify-between">
+              <div className="border-b border-ink-100 pb-1.5">
+                <h2 className="text-xs font-black text-ink-800 uppercase tracking-wide">⚡ Defense SLA Telemetry</h2>
+                <p className="text-[9.5px] text-ink-400 font-medium">Real-time model latency & containment.</p>
+              </div>
+              <div className="space-y-1.5">
+                <div className="flex items-center justify-between p-1.5 bg-slate-50 border border-slate-100 rounded text-[10px]">
+                  <span className="font-bold text-ink-700">ML Confidence Score</span>
+                  <span className="font-mono font-black text-emerald-600">{analyticsData.system_safety.ml_confidence_avg}%</span>
+                </div>
+                <div className="flex items-center justify-between p-1.5 bg-slate-50 border border-slate-100 rounded text-[10px]">
+                  <span className="font-bold text-ink-700">Threat Containment Latency</span>
+                  <span className="font-mono font-black text-blue-600">{analyticsData.system_safety.containment_latency_ms} ms</span>
+                </div>
+                <div className="flex items-center justify-between p-1.5 bg-slate-50 border border-slate-100 rounded text-[10px]">
+                  <span className="font-bold text-ink-700">Zero-Day Defense Mode</span>
+                  <span className="font-mono font-black text-emerald-600">Active (100%)</span>
+                </div>
+                <div className="flex items-center justify-between p-1.5 bg-slate-50 border border-slate-100 rounded text-[10px]">
+                  <span className="font-bold text-ink-700">MFA / Step-Up Trigger SLA</span>
+                  <span className="font-mono font-black text-shield-600">&lt; 1.0s Verified</span>
+                </div>
+              </div>
             </div>
           </div>
 
