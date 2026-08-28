@@ -1,0 +1,29 @@
+# Python
+backend/venv/
+backend/__pycache__/
+**/__pycache__/
+*.pyc
+
+# SQLite database (recreated automatically on first run)
+backend/data/recipient_shield.db
+
+# Node
+frontend/node_modules/
+frontend/dist/
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Env
+.env
+.env.local
+
+# Insider Threat Monitor overrides
+insider-threat-monitor/backend/venv/
+insider-threat-monitor/backend/__pycache__/
+insider-threat-monitor/frontend/node_modules/
+insider-threat-monitor/frontend/dist/
+insider-threat-monitor/backend/insider_threat_monitor.db

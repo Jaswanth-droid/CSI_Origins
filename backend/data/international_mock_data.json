@@ -1,0 +1,55 @@
+{
+  "mock_accounts": [
+    {
+      "account_number": "100123456789",
+      "phone_number": "+91 9876543210",
+      "balance": 150000.00,
+      "transactions": [
+        {
+          "event_type": "deposit",
+          "amount": 50000.00,
+          "timestamp_offset_days": -1,
+          "note": "Salary Credit"
+        },
+        {
+          "event_type": "transfer_out",
+          "amount": 2500.00,
+          "timestamp_offset_days": -2,
+          "note": "Utility Bill"
+        },
+        {
+          "event_type": "login",
+          "timestamp_offset_days": -3
+        }
+      ]
+    },
+    {
+      "account_number": "200987654321",
+      "phone_number": "+1 5550123456",
+      "balance": 27500.50,
+      "transactions": [
+        {
+          "event_type": "deposit",
+          "amount": 10000.00,
+          "timestamp_offset_days": -5,
+          "note": "Client Payment"
+        },
+        {
+          "event_type": "login",
+          "timestamp_offset_days": -6
+        }
+      ]
+    },
+    {
+      "account_number": "300112233445",
+      "phone_number": "+44 7700900123",
+      "balance": 5400.00,
+      "transactions": [
+        {
+          "event_type": "login",
+          "timestamp_offset_days": -1
+        }
+      ]
+    }
+  ]
+}

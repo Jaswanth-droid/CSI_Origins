@@ -1,0 +1,51 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html, body, #root {
+    height: 100%;
+  }
+  body {
+    @apply bg-ink-50 text-ink-800 antialiased;
+    font-feature-settings: 'cv11', 'ss01';
+  }
+}
+
+@layer components {
+  .card {
+    @apply bg-white rounded-xl2 shadow-card border border-ink-100;
+  }
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg font-semibold text-sm px-4 py-2.5 transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  .btn-primary {
+    @apply btn bg-shield-600 text-white hover:bg-shield-700 shadow-sm;
+  }
+  .btn-secondary {
+    @apply btn bg-white text-ink-700 border border-ink-200 hover:bg-ink-50;
+  }
+  .btn-danger {
+    @apply btn bg-risk-high text-white hover:bg-[#a81f30];
+  }
+  .btn-ghost {
+    @apply btn bg-transparent text-ink-500 hover:bg-ink-100;
+  }
+  .input {
+    @apply w-full rounded-lg border border-ink-200 bg-white px-3.5 py-2.5 text-sm text-ink-800 placeholder-ink-400 focus:outline-none focus:ring-2 focus:ring-shield-400 focus:border-shield-400;
+  }
+  .label {
+    @apply block text-xs font-semibold uppercase tracking-wide text-ink-500 mb-1.5;
+  }
+  .pill {
+    @apply inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold;
+  }
+  .pill-low { @apply pill bg-risk-lowBg text-risk-low; }
+  .pill-medium { @apply pill bg-risk-mediumBg text-risk-medium; }
+  .pill-high { @apply pill bg-risk-highBg text-risk-high; }
+}
+
+/* subtle scrollbar for the timeline / activity panels */
+.thin-scroll::-webkit-scrollbar { width: 6px; height: 6px; }
+.thin-scroll::-webkit-scrollbar-thumb { background: #cbd3e1; border-radius: 999px; }
+.thin-scroll::-webkit-scrollbar-track { background: transparent; }

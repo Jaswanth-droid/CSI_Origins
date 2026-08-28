@@ -1,0 +1,22 @@
+[
+  "recent_device_change",
+  "recent_new_device",
+  "recent_password_reset",
+  "recent_password_change",
+  "recent_sim_change",
+  "recent_email_change",
+  "recent_beneficiary_added",
+  "recent_beneficiary_modified",
+  "failed_login_count",
+  "new_location",
+  "unusual_login_time",
+  "transaction_velocity",
+  "large_incoming_transfer",
+  "large_outgoing_transfer",
+  "rapid_transactions",
+  "unusual_transaction_amount",
+  "multiple_security_changes",
+  "time_between_security_events",
+  "profile_change",
+  "total_recent_events"
+]

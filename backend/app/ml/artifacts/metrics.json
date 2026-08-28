@@ -1,0 +1,83 @@
+{
+  "trained_at": "2026-08-16T13:20:40Z",
+  "n_samples": 6000,
+  "n_train": 4500,
+  "n_test": 1500,
+  "model_type": "RandomForestRegressor (predicts 0-100 risk severity)",
+  "flag_cutoff_used_for_classification_metrics": 29,
+  "flag_definition": "flagged = NOT auto-ALLOWed (i.e. VERIFY or WARN_AND_HOLD triggered)",
+  "evaluation_scope": "accuracy/precision/recall/F1/confusion_matrix computed on normal vs. compromised archetypes only (see medium_risk_routing / hard_negative_handling for the ambiguous middle-ground archetypes)",
+  "accuracy": 0.9685,
+  "precision": 0.8986,
+  "recall": 0.9852,
+  "f1_score": 0.9399,
+  "mae": 2.152,
+  "rmse": 3.401,
+  "confusion_matrix": {
+    "tn": 778,
+    "fp": 30,
+    "fn": 4,
+    "tp": 266
+  },
+  "detection_rate": 0.9852,
+  "false_positive_rate": 0.0371,
+  "high_risk_cutoff": 69,
+  "high_risk_detection_rate": 0.8407,
+  "high_risk_confusion_matrix": {
+    "tn": 808,
+    "fp": 0,
+    "fn": 43,
+    "tp": 227
+  },
+  "medium_risk_routing": {
+    "description": "Fraction of MEDIUM-risk archetype accounts correctly routed to step-up verification (not auto-allowed)",
+    "correctly_routed_rate": 1.0
+  },
+  "hard_negative_handling": {
+    "description": "innocent_security_change = a normal account that legitimately triggered ONE benign security event. Measures how often the system avoids over-reacting to it.",
+    "not_auto_blocked_rate": 1.0,
+    "auto_allowed_rate": 0.4048
+  },
+  "avg_warning_lead_time_minutes": 18,
+  "feature_importances": {
+    "recent_device_change": 0.7671,
+    "large_outgoing_transfer": 0.1201,
+    "multiple_security_changes": 0.0631,
+    "unusual_transaction_amount": 0.0209,
+    "unusual_login_time": 0.01,
+    "total_recent_events": 0.0066,
+    "transaction_velocity": 0.0066,
+    "large_incoming_transfer": 0.0014,
+    "profile_change": 0.0013,
+    "recent_new_device": 0.0011,
+    "time_between_security_events": 0.0007,
+    "failed_login_count": 0.0004,
+    "new_location": 0.0004,
+    "recent_sim_change": 0.0001,
+    "recent_beneficiary_added": 0.0001,
+    "rapid_transactions": 0.0001,
+    "recent_password_reset": 0.0001,
+    "recent_password_change": 0.0,
+    "recent_email_change": 0.0,
+    "recent_beneficiary_modified": 0.0
+  },
+  "archetype_score_summary": {
+    "medium": {
+      "mean_predicted_score": 58.6,
+      "count": 1200
+    },
+    "compromised": {
+      "mean_predicted_score": 87.5,
+      "count": 1080
+    },
+    "normal": {
+      "mean_predicted_score": 12.3,
+      "count": 3240
+    },
+    "innocent_security_change": {
+      "mean_predicted_score": 30.5,
+      "count": 480
+    }
+  },
+  "disclaimer": "Evaluated on a held-out split of SIMULATED/synthetic recipient account-activity sequences. Not a measurement of real-world banking fraud detection accuracy."
+}
