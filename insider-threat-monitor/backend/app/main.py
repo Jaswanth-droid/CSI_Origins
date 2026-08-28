@@ -86,6 +86,10 @@ def get_actions(
             elif r.decision in ("WARN_AND_HOLD", "BLOCK") or r.tx_status == "HELD":
                 mitigation_action = "SUSPEND"
 
+            rec_num_clean = str(r.recipient_acc_num)
+            if rec_num_clean.replace(".", "", 1).isdigit():
+                rec_num_clean = str(int(float(rec_num_clean)))
+
             combined.append({
                 "id": f"tx-{r.id}",
                 "user_id": r.user_id,
@@ -94,7 +98,8 @@ def get_actions(
                 "role": r.user_role or "sender",
                 "action_type": "FUND_TRANSFER",
                 "timestamp": r.created_at.isoformat() if hasattr(r.created_at, "isoformat") else str(r.created_at),
-                "resource_target": f"A/C {r.recipient_acc_num} ({r.recipient_name})",
+                "resource_target": f"₹{r.amount:,.0f} → {r.recipient_name} ({rec_num_clean})",
+                "amount": r.amount,
                 "business_context": "None",
                 "shift_status": shift_status,
                 "risk_score": risk_score,
@@ -128,6 +133,10 @@ def get_actions(
             now_hour = added_at_dt.hour
             shift_status = "In Shift" if 9 <= now_hour < 18 else "After Hours"
 
+            acc_num_clean = str(r.account_number)
+            if acc_num_clean.replace(".", "", 1).isdigit():
+                acc_num_clean = str(int(float(acc_num_clean)))
+
             combined.append({
                 "id": f"rc-{r.id}",
                 "user_id": r.user_id,
@@ -136,7 +145,8 @@ def get_actions(
                 "role": r.user_role or "sender",
                 "action_type": "BENEFICIARY_CHANGE",
                 "timestamp": r.added_at.isoformat() if hasattr(r.added_at, "isoformat") else str(r.added_at),
-                "resource_target": f"Link Beneficiary A/C {r.account_number} ({r.beneficiary_name})",
+                "resource_target": f"Link Beneficiary {r.beneficiary_name} ({acc_num_clean})",
+                "amount": None,
                 "business_context": "None",
                 "shift_status": shift_status,
                 "risk_score": 0.0,
