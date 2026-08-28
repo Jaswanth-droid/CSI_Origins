@@ -1,8 +1,12 @@
+import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 
-# External Recipient Shield DB connection (read-only SQLite)
-RS_DB_PATH = "C:/Users/DELL/Downloads/recipient-shield-phase3/recipient-shield-phase3/backend/data/recipient_shield.db"
+# External Recipient Shield DB connection (dynamically resolve active workspace DB)
+WORKSPACE_RS_DB = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../backend/data/recipient_shield.db"))
+DOWNLOADS_RS_DB = "C:/Users/DELL/Downloads/recipient-shield-phase3/recipient-shield-phase3/backend/data/recipient_shield.db"
+RS_DB_PATH = WORKSPACE_RS_DB if os.path.exists(WORKSPACE_RS_DB) else DOWNLOADS_RS_DB
+
 rs_engine = create_engine(f"sqlite:///{RS_DB_PATH}", connect_args={"check_same_thread": False})
 RS_SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=rs_engine)
 
