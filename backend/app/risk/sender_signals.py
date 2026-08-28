@@ -127,11 +127,42 @@ def check_amount_spike(db: Session, sender_account_id: str, amount: float, now: 
     }
 
 
-def evaluate(db: Session, sender_account_id: str, recipient_account_id: str, amount: float, now: datetime = None) -> list:
+def check_balance_depletion(sender_balance: float, amount: float) -> dict:
+    """Flags a single transaction that depletes greater than 45% of the sender's available balance.
+    
+    When a single transfer exceeds 45% of current available balance, it represents extreme
+    capital drain and elevated risk of account takeover or coercion.
+    """
+    if sender_balance is None or sender_balance <= 0:
+        ratio = 1.0
+    else:
+        ratio = amount / sender_balance
+
+    triggered = ratio > 0.45
+    return {
+        "type": "BALANCE_DEPLETION",
+        "triggered": triggered,
+        "ratio": round(ratio, 4),
+        "message": (
+            f"High Balance Depletion Alert: This transfer of Rs.{amount:,.0f} drains {ratio * 100:.1f}% "
+            f"of your available balance (Rs.{sender_balance:,.0f}), exceeding the 45% safe threshold."
+        ) if triggered else "",
+        "details": {
+            "amount": amount,
+            "sender_balance": sender_balance,
+            "depletion_percent": round(ratio * 100, 1),
+            "threshold_percent": 45.0,
+        },
+    }
+
+
+def evaluate(db: Session, sender_account_id: str, recipient_account_id: str, amount: float, sender_balance: float = None, now: datetime = None) -> list:
     """Run all sender-behavior checks and return only the ones that triggered."""
     now = now or datetime.utcnow()
     checks = [
         check_transfer_velocity(db, sender_account_id, recipient_account_id, now),
         check_amount_spike(db, sender_account_id, amount, now),
     ]
+    if sender_balance is not None:
+        checks.append(check_balance_depletion(sender_balance, amount))
     return [c for c in checks if c["triggered"]]

@@ -21,11 +21,21 @@ def compute_cibil_score(db: Session, account: models.Account) -> int:
     ).all()
     
     modifiers = 0
+    depletion_penalty = 0
+    
     for t in txns:
         if t.status == "COMPLETED":
             if t.sender_account_id == account.id:
-                # Outgoing completed transfer increases credit activity score
-                modifiers += 8
+                # Check if this outgoing transaction drained > 45% of the account balance at transfer time
+                pre_balance = (account.balance + t.amount) if (account.balance + t.amount) > 0 else t.amount
+                ratio = t.amount / pre_balance if pre_balance > 0 else 0.0
+                
+                if ratio > 0.45:
+                    # Heavy CIBIL penalty for aggressive capital depletion (>45%)
+                    depletion_penalty += int(85 + (ratio - 0.45) * 120)
+                else:
+                    # Outgoing completed transfer increases credit activity score
+                    modifiers += 8
             else:
                 # Incoming completed transfer increases account health
                 modifiers += 3
@@ -36,7 +46,7 @@ def compute_cibil_score(db: Session, account: models.Account) -> int:
     # Balance modifier: +2 for every 10,000 INR in balance (capped at +40)
     balance_mod = min(40, int(account.balance // 10000) * 2)
     
-    final_score = base_score + modifiers + balance_mod
+    final_score = base_score + modifiers + balance_mod - depletion_penalty
     # Clamp between 300 and 900 (CIBIL limits)
     return max(300, min(900, final_score))
 

@@ -107,8 +107,25 @@ def check_risk(payload: schemas.CheckRiskRequest, db: Session = Depends(get_db),
         raise HTTPException(status_code=400, detail="Sender and recipient cannot be the same account")
 
     result = _assess_account(db, recipient)
-    flags = sender_signals.evaluate(db, sender.id, recipient.id, payload.amount, now=datetime.utcnow())
-    if flags:
+    depletion = sender_signals.check_balance_depletion(sender.balance, payload.amount)
+    flags = sender_signals.evaluate(db, sender.id, recipient.id, payload.amount, sender_balance=sender.balance, now=datetime.utcnow())
+    
+    if depletion["triggered"]:
+        dep_pct = depletion["details"]["depletion_percent"]
+        # Substantially increase risk score: set to minimum 78.5 (HIGH RISK)
+        result["risk_score"] = round(max(float(result["risk_score"]) + 45.0, 78.5), 1)
+        result["risk_level"] = "HIGH"
+        result["decision"] = "WARN_AND_HOLD" if result["risk_score"] >= 80 else "VERIFY"
+        result["action_label"] = result["decision"]
+        reason_msg = (
+            f"High Balance Depletion: Single transfer of Rs.{payload.amount:,.2f} "
+            f"depletes {dep_pct:.1f}% of total account balance (>45% threshold)."
+        )
+        if reason_msg not in result.get("reasons", []):
+            result["reasons"].insert(0, reason_msg)
+        result["top_reason"] = f"Capital Drain: Single transfer exceeds {dep_pct:.1f}% of available balance"
+        result = _escalate_decision(result, result["decision"])
+    elif flags:
         result = _escalate_decision(result, "VERIFY")
 
     recipient_link = _get_recipient_link(db, sender.user_id, recipient.id)
@@ -171,8 +188,23 @@ def initiate_transfer(payload: schemas.InitiateTransferRequest, db: Session = De
     # trust a stale client-held risk result for the actual money-movement
     # decision.
     result = _assess_account(db, recipient)
-    flags = sender_signals.evaluate(db, sender.id, recipient.id, payload.amount, now=datetime.utcnow())
-    if flags:
+    depletion = sender_signals.check_balance_depletion(sender.balance, payload.amount)
+    flags = sender_signals.evaluate(db, sender.id, recipient.id, payload.amount, sender_balance=sender.balance, now=datetime.utcnow())
+    if depletion["triggered"]:
+        dep_pct = depletion["details"]["depletion_percent"]
+        result["risk_score"] = round(max(float(result["risk_score"]) + 45.0, 78.5), 1)
+        result["risk_level"] = "HIGH"
+        result["decision"] = "WARN_AND_HOLD" if result["risk_score"] >= 80 else "VERIFY"
+        result["action_label"] = result["decision"]
+        reason_msg = (
+            f"High Balance Depletion: Single transfer of Rs.{payload.amount:,.2f} "
+            f"depletes {dep_pct:.1f}% of total account balance (>45% threshold)."
+        )
+        if reason_msg not in result.get("reasons", []):
+            result["reasons"].insert(0, reason_msg)
+        result["top_reason"] = f"Capital Drain: Single transfer exceeds {dep_pct:.1f}% of available balance"
+        result = _escalate_decision(result, result["decision"])
+    elif flags:
         result = _escalate_decision(result, "VERIFY")
 
     recipient_link = _get_recipient_link(db, sender.user_id, recipient.id)
