@@ -97,8 +97,8 @@ def get_actions(
                 "full_name": r.sender_name,
                 "role": r.user_role or "sender",
                 "action_type": "FUND_TRANSFER",
-                "timestamp": r.created_at.isoformat() if hasattr(r.created_at, "isoformat") else str(r.created_at),
-                "resource_target": f"₹{r.amount:,.0f} → {r.recipient_name} ({rec_num_clean})",
+                "timestamp": str(r.created_at).replace(" ", "T"),
+                "resource_target": f"₹{r.amount:,.0f} → {r.recipient_name}",
                 "amount": r.amount,
                 "business_context": "None",
                 "shift_status": shift_status,
@@ -133,10 +133,6 @@ def get_actions(
             now_hour = added_at_dt.hour
             shift_status = "In Shift" if 9 <= now_hour < 18 else "After Hours"
 
-            acc_num_clean = str(r.account_number)
-            if acc_num_clean.replace(".", "", 1).isdigit():
-                acc_num_clean = str(int(float(acc_num_clean)))
-
             combined.append({
                 "id": f"rc-{r.id}",
                 "user_id": r.user_id,
@@ -144,8 +140,8 @@ def get_actions(
                 "full_name": r.owner_name,
                 "role": r.user_role or "sender",
                 "action_type": "BENEFICIARY_CHANGE",
-                "timestamp": r.added_at.isoformat() if hasattr(r.added_at, "isoformat") else str(r.added_at),
-                "resource_target": f"Link Beneficiary {r.beneficiary_name} ({acc_num_clean})",
+                "timestamp": str(r.added_at).replace(" ", "T"),
+                "resource_target": f"Link Beneficiary {r.beneficiary_name}",
                 "amount": None,
                 "business_context": "None",
                 "shift_status": shift_status,
@@ -169,7 +165,7 @@ def get_actions(
                 "full_name": s.full_name,
                 "role": s.role,
                 "action_type": s.action_type,
-                "timestamp": s.timestamp.isoformat() if hasattr(s.timestamp, "isoformat") else str(s.timestamp),
+                "timestamp": s.timestamp.isoformat() if hasattr(s.timestamp, "isoformat") else str(s.timestamp).replace(" ", "T"),
                 "resource_target": s.resource_target,
                 "business_context": s.business_context,
                 "shift_status": s.shift_status,
@@ -182,8 +178,8 @@ def get_actions(
     except Exception as e:
         print(f"Error querying simulated actions: {e}")
 
-    # Sort combined actions in descending order by timestamp
-    combined.sort(key=lambda x: x["timestamp"], reverse=True)
+    # Sort combined actions chronologically in descending order (newest first)
+    combined.sort(key=lambda x: str(x["timestamp"]).replace(" ", "T"), reverse=True)
     return combined
 
 
